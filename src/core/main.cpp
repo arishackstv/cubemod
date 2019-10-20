@@ -91,14 +91,14 @@ void Main::SetupHooks()
 void Main::ChangeArtifactDisplay()
 {
 	//Item display
-	MemoryHelper::FindAndReplaceString(L"Increases hang gliding speed.", L"Increases base health.");
-	MemoryHelper::FindAndReplaceString(L"You can climb faster.", L"Increases base armor.");
-	MemoryHelper::FindAndReplaceString(L"Increases sailing speed.", L"Increases base damage.");
-	MemoryHelper::FindAndReplaceString(L"Increases swimming speed.", L"Increases base haste.");
-	MemoryHelper::FindAndReplaceString(L"You consume less stamina when diving.", L"Increases base regeneration.");
-	MemoryHelper::FindAndReplaceString(L"Increases riding speed.", L"Increases base crit.");
+	MemoryHelper::FindAndReplaceString(L"Increases hang gliding speed.", L"Increases base regeneration.");
+	MemoryHelper::FindAndReplaceString(L"You can climb faster.", L"Increases base health.");
+	MemoryHelper::FindAndReplaceString(L"Increases sailing speed.", L"Increases base crit.");
+	MemoryHelper::FindAndReplaceString(L"Increases swimming speed.", L"Increases base armor.");
+	MemoryHelper::FindAndReplaceString(L"You consume less stamina when diving.", L"Increases base damage.");
+	MemoryHelper::FindAndReplaceString(L"Increases riding speed.", L"Increases base haste.");
 	MemoryHelper::FindAndReplaceString(L"Increases the radius of your lamp.", L"Increases base resistance.");
-
+	
 	//Inventory display
 	MemoryHelper::FindAndReplaceString(L"Climbing Speed", L"Base Health");
 	MemoryHelper::FindAndReplaceString(L"Swimming Speed", L"Base Armor");
