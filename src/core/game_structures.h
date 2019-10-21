@@ -270,8 +270,7 @@ struct Entity
 		auto center_coordinates = Main::GetInstance().GetCenterCoordinates();
 		if (center_coordinates.x == INT_MIN && center_coordinates.y == INT_MIN)
 		{
-			//item->SetRegionCoordinates(center_coordinates);
-			item->SetRegionCoordinates(RegionCoordinates{0, 0});
+			item->SetRegionCoordinates(center_coordinates);
 		}
 
 		RegionCoordinates region_coordinates = ((Entity*)Main::GetInstance().GetLocalPlayer())->GetRegionCoordinates();
