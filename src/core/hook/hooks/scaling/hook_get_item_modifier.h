@@ -1,13 +1,13 @@
 #pragma once
 
-#include "../../hook.h"
-#include "../../../game_structures.h"
+#include <hook/hook.h>
+#include <game_structures.h>
 
 class HookGetItemModifier : public Hook
 {
 	static inline Hook* hook;
 
-	static float __fastcall GetItemModifier(Item* item, Entity* entity, int blocks)
+	static float HOOK GetItemModifier(Item* item, Entity* entity, int blocks)
 	{
 		auto modifier = hook->Trampoline(GetItemModifier)(item, entity, blocks);
 

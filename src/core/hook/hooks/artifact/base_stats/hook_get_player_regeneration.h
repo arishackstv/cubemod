@@ -1,13 +1,13 @@
 #pragma once
 
-#include "../../../hook.h"
-#include "../../../../game_structures.h"
+#include <hook/hook.h>
+#include <game_structures.h>
 
 class HookGetPlayerRegeneration : public Hook
 {
 	static inline Hook* hook;
 
-	static float __fastcall GetRegeneration(Entity* entity)
+	static float HOOK GetRegeneration(Entity* entity)
 	{
 		auto ret = hook->Trampoline(GetRegeneration)(entity);
 		if (entity->GetEntityType() != PLAYER) return ret;

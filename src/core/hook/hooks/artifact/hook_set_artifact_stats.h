@@ -1,13 +1,13 @@
 #pragma once
 
-#include "../../hook.h"
-#include "../../../game_structures.h"
+#include <hook/hook.h>
+#include <game_structures.h>
 
 class HookSetArtifactStats : public Hook
 {
 	static inline Hook* hook;
 
-	static uint64_t __fastcall SetArtifactStats(Player* player)
+	static uint64_t HOOK SetArtifactStats(Player* player)
 	{
 		auto ret = hook->Trampoline(SetArtifactStats)(player);
 

@@ -1,16 +1,16 @@
 #pragma once
 
-#include "../../../hook.h"
-#include "../../../../game_structures.h"
+#include <hook/hook.h>
+#include <game_structures.h>
 
 class HookRoundArtifactThing : public Hook
 {
 	static inline Hook* hook;
 
-	static float __fastcall RoundArtifactThing(float f)
+	static float HOOK RoundArtifactThing(float f)
 	{
 		//If it's called from that spot in the inventory display
-		if (_ReturnAddress() == (void*)(MemoryHelper::GetCubeBase() + 0x2755E4) || _ReturnAddress() == (void*)(MemoryHelper::GetCubeBase() + 0x275646))
+		if (__builtin_return_address(0) == (void*)(MemoryHelper::GetCubeBase() + 0x2755E4) || __builtin_return_address(0) == (void*)(MemoryHelper::GetCubeBase() + 0x275646))
 		{
 			f = Main::GetInstance().GetLocalPlayer()->GetIncreasedArtifactStats((ArtifactType)HookConcatArtifactSuffix::artifact_index, true);
 		}

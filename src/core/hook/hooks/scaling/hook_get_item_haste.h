@@ -1,14 +1,14 @@
 #pragma once
 
-#include "../../hook.h"
-#include "../../../game_structures.h"
+#include <hook/hook.h>
+#include <game_structures.h>
 
 class HookGetItemHaste : public Hook
 {
 	static inline Hook* hook;
 
 	//Haste don't scale well
-	static float __fastcall GetItemHaste(Item* item, Entity* entity, float a3)
+	static float HOOK GetItemHaste(Item* item, Entity* entity, float a3)
 	{
 		auto regen = hook->Trampoline(GetItemHaste)(item, entity, a3);
 

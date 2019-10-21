@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../hook.h"
+#include <hook/hook.h>
 
 class ChatString
 {
@@ -53,7 +53,7 @@ class HookSendChat : public Hook
 #define COLOR_GREEN 0x20E665
 #define COLOR_RED 0xD44C4C
 
-	static void __fastcall SendChatHook(void* self, ChatString& message, int& colour)
+	static void HOOK SendChatHook(void* self, ChatString &message, int &colour)
 	{
 		std::wstring wstr(message.GetData());
 		if (wstr.find(L"/pvp") != std::string::npos)

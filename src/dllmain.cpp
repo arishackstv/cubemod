@@ -1,6 +1,5 @@
 #include <Windows.h>
-
-#include "core/main.h"
+#include <main.h>
 
 void Start()
 {

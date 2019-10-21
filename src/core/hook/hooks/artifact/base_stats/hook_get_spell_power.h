@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../../hook.h"
-#include "../../../../game_structures.h"
+#include <hook/hook.h>
+#include <game_structures.h>
 
 class HookGetSpellPower : public Hook
 {
@@ -9,7 +9,7 @@ class HookGetSpellPower : public Hook
 
 	static inline float* base_damage = (float*)(MemoryHelper::GetCubeBase() + 0x42E584);
 
-	static float __fastcall GetSpellPower(Player* player)
+	static float HOOK GetSpellPower(Player* player)
 	{
 		if (player->GetEntityType() != PLAYER) return hook->Trampoline(GetSpellPower)(player);
 

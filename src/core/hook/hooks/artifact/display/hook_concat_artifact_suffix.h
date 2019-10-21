@@ -1,16 +1,16 @@
 #pragma once
 
-#include "../../../hook.h"
-#include "../../../../game_structures.h"
+#include <hook/hook.h>
+#include <game_structures.h>
 
 class HookConcatArtifactSuffix : public Hook
 {
 	static inline Hook* hook;
 
-	static uint64_t __fastcall ConcatArtifactSuffix(void* a1, wchar_t* str)
+	static uint64_t HOOK ConcatArtifactSuffix(void* a1, wchar_t* str)
 	{
 		//If it's called from that spot in the inventory display
-		if (_ReturnAddress() == (void*)(MemoryHelper::GetCubeBase() + 0x275663))
+		if (__builtin_return_address(0) == (void*)(MemoryHelper::GetCubeBase() + 0x275663))
 		{
 			//Remove the extra stuff for our artifact display
 			switch (artifact_index)

@@ -4,7 +4,7 @@
 #include <sstream>
 #include <random>
 #include <functional>
-#include "main.h"
+#include <main.h>
 #include <climits>
 
 struct RegionCoordinates
@@ -20,7 +20,6 @@ struct RegionCoordinates
 	{
 		float x_diff = abs(x - coordinates.x);
 		float y_diff = abs(y - coordinates.y);
-		return sqrt(x_diff * x_diff + y_diff * y_diff);
 		return sqrt(x_diff * x_diff + y_diff * y_diff);
 	}
 };
@@ -207,22 +206,17 @@ struct Item
 					break;
 
 				case ItemRarity::RARE:
-					if (percentage < 25) rarity_decrease = 2;
-					else if (percentage < 50) rarity_decrease = 1;
+					if (percentage < 30) rarity_decrease = 1;
 					break;
 
 				case ItemRarity::EPIC:
-					if (percentage < 15) rarity_decrease = 3;
-					else if (percentage < 45) rarity_decrease = 2;
-					else if (percentage < 70) rarity_decrease = 1;
+					if (percentage < 40) rarity_decrease = 1;
 					break;
 
 				case ItemRarity::LEGENDARY:
-					if (percentage < 10) rarity_decrease = 4;
-					else if (percentage < 25) rarity_decrease = 3;
-					else if (percentage < 50) rarity_decrease = 2;
-					else if (percentage < 75) rarity_decrease = 1;
-					else if (mythic_percentage > 94)
+					if (percentage < 15) rarity_decrease = 2;
+					else if (percentage < 50) rarity_decrease = 1;
+					else if (mythic_percentage > 90)
 					{
 						//Make the item mythic
 						mythic = true;
@@ -276,7 +270,8 @@ struct Entity
 		auto center_coordinates = Main::GetInstance().GetCenterCoordinates();
 		if (center_coordinates.x == INT_MIN && center_coordinates.y == INT_MIN)
 		{
-			item->SetRegionCoordinates(center_coordinates);
+			//item->SetRegionCoordinates(center_coordinates);
+			item->SetRegionCoordinates(RegionCoordinates{0, 0});
 		}
 
 		RegionCoordinates region_coordinates = ((Entity*)Main::GetInstance().GetLocalPlayer())->GetRegionCoordinates();
@@ -325,7 +320,7 @@ struct Entity
 		if (GetEntityType() == PLAYER && item->GetRarity() == LEGENDARY && item->GetModifier() % 50 == 0)
 		{
 			//Boost the stats for mythic items here, 50% better to start with, decreasing by .1% per region down to 25%
-			mythic_modifier = max(1.5f - region_difference * 0.001f, 1.25f);
+			mythic_modifier = std::max(1.5f - region_difference * 0.001f, 1.25f);
 		}
 
 		return 1.f + (region_difference * (weapon ? weapon_multiplier : armor_multiplier)) * 2.5f * mythic_modifier;
@@ -342,6 +337,11 @@ struct Player : public Entity
 	std::string GetName()
 	{
 		return std::string((char*)this + 0x958);
+	}
+
+	Item** GetInventory()
+	{
+		return *(Item***)(this + 0x9F0);
 	}
 
 	/**

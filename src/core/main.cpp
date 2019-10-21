@@ -1,33 +1,32 @@
-#include "main.h"
+#include <main.h>
 
 #include <fstream>
 
-#include "memory/memory_helper.h"
+#include <memory/memory_helper.h>
 
 //Hook stuff wheee
-#include "hook/hooks/item_generation/hook_create_weapon.h"
-#include "hook/hooks/item_generation/hook_create_armor.h"
-#include "hook/hooks/item_generation/hook_give_item.h"
-#include "hook/hooks/scaling/hook_get_item_modifier.h"
-#include "hook/hooks/scaling/hook_get_item_regen.h"
-#include "hook/hooks/scaling/hook_get_item_haste.h"
-#include "hook/hooks/scaling/hook_get_item_crit.h"
-#include "hook/hooks/pvp/hook_can_attack_entity.h"
-#include "hook/hooks/artifact/hook_set_artifact_stats.h"
-#include "hook/hooks/artifact/display/hook_concat_artifact_suffix.h"
-#include "hook/hooks/artifact/display/hook_round_artifact_thing.h"
-#include "hook/hooks/artifact/display/hook_artifact_display_roundf.h"
-#include "hook/hooks/artifact/base_stats/hook_get_hit_points.h"
-#include "hook/hooks/artifact/base_stats/hook_get_player_armor.h"
-#include "hook/hooks/artifact/base_stats/hook_get_attack_power.h"
-#include "hook/hooks/artifact/base_stats/hook_get_spell_power.h"
-#include "hook/hooks/artifact/base_stats/hook_get_player_haste.h"
-#include "hook/hooks/artifact/base_stats/hook_get_player_regeneration.h"
-#include "hook/hooks/artifact/base_stats/hook_get_player_resistance.h"
-#include "hook/hooks/artifact/base_stats/hook_get_player_crit.h"
-#include "hook/hooks/command/hook_send_chat.h"
+#include <hook/hooks/item_generation/hook_create_weapon.h>
+#include <hook/hooks/item_generation/hook_create_armor.h>
+#include <hook/hooks/scaling/hook_get_item_modifier.h>
+#include <hook/hooks/scaling/hook_get_item_regen.h>
+#include <hook/hooks/scaling/hook_get_item_haste.h>
+#include <hook/hooks/scaling/hook_get_item_crit.h>
+#include <hook/hooks/pvp/hook_can_attack_entity.h>
+#include <hook/hooks/artifact/hook_set_artifact_stats.h>
+#include <hook/hooks/artifact/display/hook_concat_artifact_suffix.h>
+#include <hook/hooks/artifact/display/hook_round_artifact_thing.h>
+#include <hook/hooks/artifact/display/hook_artifact_display_roundf.h>
+#include <hook/hooks/artifact/base_stats/hook_get_hit_points.h>
+#include <hook/hooks/artifact/base_stats/hook_get_player_armor.h>
+#include <hook/hooks/artifact/base_stats/hook_get_attack_power.h>
+#include <hook/hooks/artifact/base_stats/hook_get_spell_power.h>
+#include <hook/hooks/artifact/base_stats/hook_get_player_haste.h>
+#include <hook/hooks/artifact/base_stats/hook_get_player_regeneration.h>
+#include <hook/hooks/artifact/base_stats/hook_get_player_resistance.h>
+#include <hook/hooks/artifact/base_stats/hook_get_player_crit.h>
+#include <hook/hooks/command/hook_send_chat.h>
 
-Main& Main::GetInstance()
+Main &Main::GetInstance()
 {
 	static auto instance = Main();
 	return instance;
@@ -38,6 +37,8 @@ void Main::Start()
 	//Config :D
 	LoadConfig();
 
+	//SetConsole(true);
+
 	//Very fun
 	PatchRegionLock();
 	ChangeArtifactDisplay();
@@ -45,16 +46,12 @@ void Main::Start()
 	SetupHooks();
 }
 
-
 //TODO: Maybe don't use hardcoded offsets but it's not like the game will ever update anyway so it's fine
 void Main::SetupHooks()
 {
 	//Used to change spawn rates
 	new HookCreateWeapon();
 	new HookCreateArmor();
-
-	//Intercept crafting here to change spawn rates
-	new HookGiveItem();
 
 	//Rebalancing items a bit
 	new HookGetItemModifier();
@@ -91,12 +88,12 @@ void Main::SetupHooks()
 void Main::ChangeArtifactDisplay()
 {
 	//Item display
-	MemoryHelper::FindAndReplaceString(L"Increases hang gliding speed.", L"Increases base health.");
-	MemoryHelper::FindAndReplaceString(L"You can climb faster.", L"Increases base armor.");
-	MemoryHelper::FindAndReplaceString(L"Increases sailing speed.", L"Increases base damage.");
-	MemoryHelper::FindAndReplaceString(L"Increases swimming speed.", L"Increases base haste.");
-	MemoryHelper::FindAndReplaceString(L"You consume less stamina when diving.", L"Increases base regeneration.");
-	MemoryHelper::FindAndReplaceString(L"Increases riding speed.", L"Increases base crit.");
+	MemoryHelper::FindAndReplaceString(L"You can climb faster.", L"Increases base health.");
+	MemoryHelper::FindAndReplaceString(L"Increases swimming speed.", L"Increases base armor.");
+	MemoryHelper::FindAndReplaceString(L"You consume less stamina when diving.", L"Increases base damage.");
+	MemoryHelper::FindAndReplaceString(L"Increases riding speed.", L"Increases base haste.");
+	MemoryHelper::FindAndReplaceString(L"Increases hang gliding speed.", L"Increases base regeneration");
+	MemoryHelper::FindAndReplaceString(L"Increases sailing speed.", L"Increases base crit.");
 	MemoryHelper::FindAndReplaceString(L"Increases the radius of your lamp.", L"Increases base resistance.");
 
 	//Inventory display
@@ -105,7 +102,7 @@ void Main::ChangeArtifactDisplay()
 	MemoryHelper::FindAndReplaceString(L"Diving Skill", L"Base Damage");
 	MemoryHelper::FindAndReplaceString(L"Riding Speed", L"Base Haste");
 	MemoryHelper::FindAndReplaceString(L"Hang Gliding Speed", L"Base Regen");
-	MemoryHelper::FindAndReplaceString(L"Sailing Speed", L"Base crit");
+	MemoryHelper::FindAndReplaceString(L"Sailing Speed", L"Base Crit");
 	MemoryHelper::FindAndReplaceString(L"Light Radius", L"Base Resistance");
 }
 
@@ -113,19 +110,15 @@ void Main::ChangeArtifactDisplay()
 void Main::PatchRegionLock()
 {
 	//Might take a second
-	uint64_t item_1;
-	while (!(item_1 = MemoryHelper::FindPattern("08 ? ? ? ? 39 01 0F 85"))) Sleep(250);
+	uint64_t special_item_display;
+	while (!(special_item_display = MemoryHelper::FindPattern("08 ? ? ? ? 39 01 0F 85"))) Sleep(250);
 
-	auto item_2 = MemoryHelper::FindPattern("39 01 0F 85 ? ? ? ? 48 FF");
-	auto item_3 = MemoryHelper::FindPattern("41 39 42 ? 0F 85 ? ? ? ? 41");
-	auto item_4 = MemoryHelper::FindPattern("0A ? ? ? ? 39 01 0F 85");
-	auto item_5 = MemoryHelper::FindPattern("41 39 00 75 ? 48 FF C1");
+	auto special_item_use = MemoryHelper::FindPattern("39 01 0F 85 ? ? ? ? 48 FF");
+	auto equipment_lock = MemoryHelper::FindPattern("41 39 00 75 ? 48 FF C1");
 
-	MemoryHelper::PatchMemory<uint8_t>(item_1 + 0x8, 0x80);
-	MemoryHelper::PatchMemory<uint8_t>(item_2 + 0x3, 0x80);
-	MemoryHelper::PatchMemory<uint8_t>(item_3 + 0x5, 0x80);
-	MemoryHelper::PatchMemory<uint8_t>(item_4 + 0x8, 0x80);
-	MemoryHelper::PatchMemory<uint8_t>(item_5 + 0x3, 0x70);
+	MemoryHelper::PatchMemory<uint8_t>(special_item_display + 0x8, 0x80);
+	MemoryHelper::PatchMemory<uint8_t>(special_item_use + 0x3, 0x80);
+	MemoryHelper::PatchMemory<uint8_t>(equipment_lock + 0x3, 0x70);
 }
 
 void Main::SetConsole(bool open)

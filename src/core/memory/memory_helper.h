@@ -1,12 +1,11 @@
 #pragma once
 
 #include <Windows.h>
-#include <Psapi.h>
+#include <psapi.h>
 #include <sstream>
 #include <vector>
 #include <iostream>
-#include "../main.h"
-#include <dbghelp.h>
+#include <main.h>
 
 #define CUBE_EXE_NAME "cubeworld.exe"
 
